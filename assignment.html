@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>GradeBoard: Assignments</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+{% if current_user.is_authenticated %}
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+      <a class="navbar-brand" href="#">RAB2</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('home') }}">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('student') }}">Students</a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="{{ url_for('assignment') }}">Assignment</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('grade') }}">Grades</a>
+          </li>
+
+
+        </ul>
+        <form class="form-inline my-2 my-lg-0">
+          <ul class="nav navbar-nav navbar-right">
+                        {% if current_user.is_authenticated %}
+                            <a href="{{ url_for('logout') }}" class="btn btn-outline-success my-2 my-sm-0" role="button">Log out</a>
+                        {% endif %}
+                    </ul>
+        </form>
+      </div>
+    </nav>
+
+    <div class="jumbotron text-center">
+      <h1>Gradeboard</h1>
+      <p>Made by Rezwan Ali & Bryan Baek</p>
+      <h3>IS 668 - Enterprise Wise Computing</h3>
+    </div>
+    <div class="col-sm-7">
+        <a href="{{ url_for('newassignment') }}" class="btn btn-primary"> <span>Add Assignment</span></a>
+    </div>
+    <div class="container">
+      <table class="table table-hover">
+        <thead class="bg-dark text-white">
+          <tr>
+            <th>ID</th>
+            <th>Assignment Title</th>
+            <th>Max Points</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for x in assignments %}
+                <form class="form-inline" method="POST" action="./delete">
+
+                <tr>
+                    <td>{{x.assignmentid}}</td>
+                    <td>{{x.assignmenttitle}}</td>
+                    <td>{{x.maxpoints}}</td>
+                    <td>
+                        <input type="hidden" value="{{x.assignmentid}}" name="currentid">
+                        <button class="btn btn-success" type="submit" value= "Delete">Delete</button>
+
+                    </td>
+                </tr>
+                </form>
+            {% endfor %}
+
+        </tbody>
+      </table>
+    </div>
+
+{% else %}
+    <div class="jumbotron text-center">
+      <h1>Gradeboard</h1>
+      <p>Made by Rezwan Ali & Bryan Baek</p>
+    </div>
+    <div class="container text-center">
+        <h2>This page is not available without log in</h2>
+        <a href="{{ url_for('login') }}" class="btn btn-outline-success my-2 my-sm-0" role="button">Log in</a>
+    </div>
+
+{% endif %}
+
+</body>
+</html>
